@@ -30,7 +30,8 @@ pipeline {
 
         stage('Tests unitaires') {
             steps {
-                bat 'python -m pytest'
+                bat 'if exist Release rmdir /S /Q Release'
+                bat 'python -m pytest test_calculator.py'
             }
         }
 
