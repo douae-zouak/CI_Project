@@ -5,7 +5,7 @@ pipeline {
         stage('Clonage') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/douae-zouak/CI_Project'
+                    url: 'https://github.com/douae-zouak/CI_Project.git'
             }
         }
 
@@ -22,9 +22,29 @@ pipeline {
             }
         }
 
+        stage('Analyse qualité du code') {
+            steps {
+                bat 'python -m pylint calculator.py || exit /b 0'
+            }
+        }
+
         stage('Tests unitaires') {
             steps {
                 bat 'python -m pytest'
+            }
+        }
+
+        stage('Création de l artefact') {
+            steps {
+                bat '''
+                if exist Release rmdir /S /Q Release
+                mkdir Release
+
+                copy calculator.py Release
+                copy test_calculator.py Release
+                copy requirements.txt Release
+                powershell Compress-Archive -Path Release\\* -DestinationPath Release.zip -Force
+                '''
             }
         }
     }
