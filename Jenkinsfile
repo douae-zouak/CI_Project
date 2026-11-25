@@ -47,7 +47,6 @@ pipeline {
                 '''
             }
         }
-    }
 
         stage('Publication de l artefact') {
             steps {
@@ -59,6 +58,7 @@ pipeline {
                 '''
             }
         }
+    }
 
     post {
         always {
